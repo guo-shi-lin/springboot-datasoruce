@@ -1,0 +1,100 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        threads:
+            max: 10
+            min-spare: 1
+    port: 8080
+    timeout: 5000ms
+    servlet:
+        context-path: /gsl
+
+#mybatis
+mybatis-plus:
+    mapper-locations: classpath*:/mapper/**/*.xml
+    #\u5B9E\u4F53\u626B\u63CF\uFF0C\u591A\u4E2Apackage\u7528\u9017\u53F7\u6216\u8005\u5206\u53F7\u5206\u9694
+    typeAliasesPackage: com.gsl.data.entity
+    global-config:
+        #\u6570\u636E\u5E93\u76F8\u5173\u914D\u7F6E
+        db-config:
+            #\u4E3B\u952E\u7C7B\u578B  AUTO:"\u6570\u636E\u5E93ID\u81EA\u589E", INPUT:"\u7528\u6237\u8F93\u5165ID", ID_WORKER:"\u5168\u5C40\u552F\u4E00ID (\u6570\u5B57\u7C7B\u578B\u552F\u4E00ID)", UUID:"\u5168\u5C40\u552F\u4E00ID UUID";
+            id-type: AUTO
+            logic-delete-value: -1
+            logic-not-delete-value: 0
+        banner: false
+    #\u539F\u751F\u914D\u7F6E
+    configuration:
+        map-underscore-to-camel-case: true
+        cache-enabled: false
+        call-setters-on-nulls: true
+        jdbc-type-for-null: 'null'
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+## druid连接池配置
+spring:
+    datasource:
+        dynamic:
+            #默认数据源
+            primary: master
+            datasource:
+                # 主库配置 master
+                master:
+                    username: root
+                    password: root
+                    driver-class-name: com.mysql.cj.jdbc.Driver
+                    url: jdbc:mysql://localhost:3306/learn_2020?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+                    initial-size: 1
+                    max-active: 10
+                    min-idle: 1
+                    max-wait: 60000
+                    pool-prepared-statements: true
+                    max-pool-prepared-statement-per-connection-size: 5
+                    time-between-eviction-runs-millis: 60000
+                    min-evictable-idle-time-millis: 300000
+                    #Oracle需要打开注释
+                    #validation-query: SELECT 1 FROM DUAL
+                    test-while-idle: true
+                    test-on-borrow: false
+                    test-on-return: false
+                    stat-view-servlet:
+                        enabled: true
+                        url-pattern: /druid/*
+                    filter:
+                        stat:
+                            log-slow-sql: true
+                            slow-sql-millis: 1000
+                            merge-sql: false
+                        wall:
+                            config:
+                                multi-statement-allow: true
+                # 从库配置 slave
+                slave:
+                    username: root
+                    password: root
+                    driver-class-name: com.mysql.cj.jdbc.Driver
+                    url: jdbc:mysql://localhost:3306/learn_2020_1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+                    initial-size: 1
+                    max-active: 10
+                    min-idle: 1
+                    max-wait: 60000
+                    pool-prepared-statements: true
+                    max-pool-prepared-statement-per-connection-size: 5
+                    time-between-eviction-runs-millis: 60000
+                    min-evictable-idle-time-millis: 300000
+                    #Oracle需要打开注释
+                    #validation-query: SELECT 1 FROM DUAL
+                    test-while-idle: true
+                    test-on-borrow: false
+                    test-on-return: false
+                    stat-view-servlet:
+                        enabled: true
+                        url-pattern: /druid/*
+                    filter:
+                        stat:
+                            log-slow-sql: true
+                            slow-sql-millis: 1000
+                            merge-sql: false
+                        wall:
+                            config:
+                                multi-statement-allow: true
